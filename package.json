@@ -1,0 +1,42 @@
+{
+  "name": "zkey-manager",
+  "version": "0.0.1",
+  "description": "A convenient way for developers to manage the .zkey files from circom circuits, for production and testing.",
+  "main": "build/index.js",
+  "scripts": {
+    "watch": "tsc --watch",
+    "build": "tsc",
+    "prepare": "tsc"
+  },
+  "bin": {
+    "zkey-manager": "build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appliedzkp/zkey-manager.git"
+  },
+  "keywords": [
+    "snarkjs",
+    "circom"
+  ],
+  "author": "Koh Wei Jie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/appliedzkp/zkey-manager/issues"
+  },
+  "homepage": "https://github.com/appliedzkp/zkey-manager#readme",
+  "dependencies": {
+    "argparse": "2.0.1",
+    "circom": "0.5.38",
+    "circomlib": "0.4.1",
+    "snarkjs": "0.3.59",
+    "js-yaml": "4.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.19",
+    "ffjavascript": "^0.2.33",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.3"
+  }
+}

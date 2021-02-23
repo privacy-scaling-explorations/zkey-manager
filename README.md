@@ -15,6 +15,17 @@ There is no guarantee that Hermez will continue to provide all `.ptau` files up
 `2 ** 28` constraints in this [Dropbox
 folder](https://www.dropbox.com/sh/mn47gnepqu88mzl/AACaJkBU7mmCq8uU8ml0-0fma?dl=0).
 
+## Requirements
+
+You need the following, preferably on a Linux machine:
+
+- NodeJS (preferably v11 or above)
+- `gcc`, `g++`, `libgmp-dev`, `nlohmann-json3-dev`, and `libsodium-dev`:
+
+```bash
+sudo apt install build-essential libgmp-dev libsodium-dev nlohmann-json3-dev nasm
+```
+
 ## Installation
 
 ```bash

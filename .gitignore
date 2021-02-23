@@ -1,3 +1,6 @@
+zkeys/*
+build/
+
 # Logs
 logs
 *.log

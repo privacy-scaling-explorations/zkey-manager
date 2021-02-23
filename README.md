@@ -3,6 +3,18 @@
 This utility simplifies the process of `zkey` file management for circuits
 written in `circom`.
 
+**Warning:** for production setups, you should verify the integrity of the
+`.ptau` files that this utility downloads.
+
+If your circuits are larger than `2 ** 20` constraints, please modify your
+config file to include the URL of a `.ptau` file that supports it. We provide
+`.ptau` files (copied from the Hermez Network Prepare Phase 1 ceremony) up to 
+`powersOfTau28_hez_final_20.ptau`.
+
+There is no guarantee that Hermez will continue to provide all `.ptau` files up
+`2 ** 28` constraints in this [Dropbox
+folder](https://www.dropbox.com/sh/mn47gnepqu88mzl/AACaJkBU7mmCq8uU8ml0-0fma?dl=0).
+
 ## Installation
 
 ```bash

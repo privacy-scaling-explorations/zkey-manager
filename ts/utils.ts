@@ -45,7 +45,7 @@ const getPtauFromConfig = (
 
     let tooLarge = false
     let powerNeeded = 1
-    while (powerNeeded ** 2 < largestConstraints) {
+    while (2 ** powerNeeded < largestConstraints) {
         powerNeeded ++
         if (powerNeeded > 28) {
             tooLarge = true

@@ -1,6 +1,6 @@
 {
   "name": "zkey-manager",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "A convenient way for developers to manage the .zkey files from circom circuits, for production and testing.",
   "main": "build/index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "circom": "0.5.38",
     "circomlib": "0.4.1",
     "circom_runtime": "0.1.13",
+    "ffiasm": "0.1.1",
     "js-yaml": "4.0.0",
     "snarkjs": "0.3.59"
   },

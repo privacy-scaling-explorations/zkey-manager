@@ -60,7 +60,7 @@ const configureSubparsers = (subparsers: ArgumentParser) => {
             required: false,
             default: '21888242871839275222246405745257275088548364400416034343698204186575808495617',
             action: 'store', 
-            type: 'string', 
+            type: 'str', 
             help: 'The elliptic curve group order. Defaults to that of BN254.',
         },
     )
@@ -122,11 +122,9 @@ const compile = async (
             }
         }
 
-        let shouldCompile = !filesExist
+        let shouldCompile = true
 
         if (noClobber && filesExist) {
-            shouldCompile = false
-        } else if (!noClobber && filesExist) {
             shouldCompile = false
         }
 
@@ -147,7 +145,7 @@ const compile = async (
             ` -t ${filepaths.wat}` +
             ` -s ${filepaths.sym}`
 
-        console.log(`Compiling ${c.component} with params ${c.params.toString()}`)
+        console.log(`Compiling ${c.component} (${c['type']}) with params ${c.params.toString()}`)
         shelljs.exec(compileCmd)
 
         const srcs = 

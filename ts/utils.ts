@@ -51,6 +51,8 @@ const getPtauFromConfig = (
             tooLarge = true
         }
     }
+    powerNeeded ++
+    console.log(largestConstraints, powerNeeded)
 
     if (tooLarge) {
         console.error('Error: the circuit has more than 2 ** 28 constraints')

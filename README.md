@@ -57,5 +57,5 @@ node build/index.js downloadPtau -nc -c <CONFIG_FILE>
 ## Generate the initial `.zkey` files
 
 ```
-node build/index.js downloadPtau -nc -c <CONFIG_FILE>
+node build/index.js genZkeys -nc -c <CONFIG_FILE>
 ```

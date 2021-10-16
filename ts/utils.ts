@@ -2,6 +2,15 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as shelljs from 'shelljs'
 
+const genName = (
+    circuitType: string,
+    component: string,
+    params: number[],
+) => {
+    const name = `${component}_${params.join('-')}_${circuitType}`
+    return name
+}
+
 const genFilepaths = (
     dirpath: string,
     circuitType: string,
@@ -10,7 +19,7 @@ const genFilepaths = (
 ) => {
     const name = path.join(
         dirpath,
-        `${component}_${params.join('-')}.${circuitType}`,
+        genName(circuitType, component, params),
     )
 
     return {
@@ -63,6 +72,7 @@ const getPtauFromConfig = (
 }
 
 export {
+    genName,
     genFilepaths,
     getPtauFromConfig,
 }

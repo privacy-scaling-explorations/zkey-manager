@@ -1,6 +1,6 @@
 {
   "name": "zkey-manager",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A convenient way for developers to manage the .zkey files from circom circuits, for production and testing.",
   "main": "build/index.js",
   "scripts": {
@@ -27,12 +27,10 @@
   "homepage": "https://github.com/appliedzkp/zkey-manager#readme",
   "dependencies": {
     "argparse": "2.0.1",
-    "circom": "0.5.38",
-    "circomlib": "0.4.1",
-    "circom_runtime": "0.1.13",
-    "ffiasm": "0.1.1",
+    "circomlib": "^2.0.0",
+    "shelljs": "^0.8.4",
     "js-yaml": "4.0.0",
-    "snarkjs": "0.3.59"
+    "snarkjs": "0.4.7"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",

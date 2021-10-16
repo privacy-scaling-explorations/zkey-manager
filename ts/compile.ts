@@ -2,7 +2,7 @@ import { ArgumentParser } from 'argparse'
 import * as fs from 'fs'
 import * as shelljs from 'shelljs'
 import * as path from 'path'
-import { genFilepaths } from './utils'
+import { genName, genFilepaths } from './utils'
 
 const configureSubparsers = (subparsers: ArgumentParser) => {
     const parser = subparsers.add_parser(
@@ -31,83 +31,25 @@ const configureSubparsers = (subparsers: ArgumentParser) => {
             help: 'Skip compilation if compiled files exist',
         }
     )
-
-    parser.add_argument(
-        '-m', '--max-old-space-size',
-        { 
-            required: false,
-            default: 4096,
-            action: 'store', 
-            type: Number, 
-            help: 'The value to set for the --max-old-space-size flag NODE_OPTIONS for circuit compilation',
-        },
-    )
-
-    parser.add_argument(
-        '-s', '--stack-size',
-        { 
-            required: false,
-            default: 1073741,
-            action: 'store', 
-            type: Number, 
-            help: 'The value to set for the NodeJS --stack-size flag for circuit compilation',
-        },
-    )
-
-    parser.add_argument(
-        '-p', '--prime',
-        { 
-            required: false,
-            default: '21888242871839275222246405745257275088548364400416034343698204186575808495617',
-            action: 'store', 
-            type: 'str', 
-            help: 'The elliptic curve group order. Defaults to that of BN254.',
-        },
-    )
 }
 
 const compile = async (
     config: any,
+    configFileDir: string,
     noClobber: boolean,
-    maxOldSpaceSize: number,
-    stackSize: number,
-    prime: string,
 ) => {
     const outDir = path.resolve('.', config.out)
     // Create outDir
     if (! fs.existsSync(outDir)) {
         fs.mkdirSync(outDir)
     }
-
-    // Copy witness gen source files
-    const circomRuntimePath = path.resolve('.', config.circomRuntimePath)
-    const ffiasmPath = path.resolve('.', config.ffiasmPath)
-
-    let cppPath = path.join(
-        circomRuntimePath,
-        'c',
-        '*.cpp'
-    )
-    shelljs.exec(`cp ${cppPath} ${outDir}`)
-
-    const hppPath = path.join(circomRuntimePath, 'c', '*.hpp')
-    shelljs.exec(`cp ${hppPath} ${outDir}`)
-
-    const buildZqFieldPath = path.join(ffiasmPath, 'src', 'buildzqfield.js')
-    shelljs.exec(`node ${buildZqFieldPath} -q ${prime} -n Fr`)
-
-    shelljs.exec(`mv fr.asm fr.cpp fr.hpp ${outDir}`)
-
-    const frAsmPath = path.join(outDir, 'fr.asm')
-    shelljs.exec(`nasm -felf64 ${frAsmPath}`)
-
     // Compile each circuit
     for (const c of config.circuits) {
         const template = path.join(
             path.resolve('./'),
             c.template,
         )
-        const circuitSrc = `include "${template}"; ` +
+        const circuitSrc = `pragma circom 2.0.0;\ninclude "${template}";\n` +
             `component main = ${c.component}(${c.params.join(', ')});\n`
 
         const filepaths = genFilepaths(outDir, c['type'], c.component, c.params)
@@ -136,30 +78,51 @@ const compile = async (
         // Write the circom file
         fs.writeFileSync(filepaths.circom, circuitSrc)
 
-        const compileCmd = `NODE_OPTIONS=--max-old-space-size=${maxOldSpaceSize}` + 
-            ` node --stack-size=${stackSize} ${config.circomPath}` +
-            ` ${filepaths.circom}` +
-            ` -r ${filepaths.r1cs}` +
-            ` -c ${filepaths.c}` +
-            ` -w ${filepaths.wasm}` +
-            ` -t ${filepaths.wat}` +
-            ` -s ${filepaths.sym}`
+        const compileCmd = `${config.circomPath} --c --r1cs --sym `+ //--wasm --wat` +
+            ` -o ${config.out} ${filepaths.circom}`
 
         console.log(`Compiling ${c.component} (${c['type']}) with params ${c.params.toString()}`)
         shelljs.exec(compileCmd)
 
-        const srcs = 
-            path.join(path.resolve(outDir), 'main.cpp') + ' ' +
-            path.join(path.resolve(outDir), 'calcwit.cpp') + ' ' +
-            path.join(path.resolve(outDir), 'utils.cpp') + ' ' +
-            path.join(path.resolve(outDir), 'fr.cpp') + ' ' +
-            path.join(path.resolve(outDir), 'fr.o')
+        const componentName = genName(c['type'], c.component, c.params)
 
-        const cmd = `g++ -pthread ${srcs} ` +
-            `${filepaths.c} -o ${filepaths.base} ` + 
-            `-lgmp -std=c++11 -O3 -fopenmp -DSANITY_CHECK`
-        shelljs.exec(cmd, {silent: true})
+        shelljs.cd(
+            path.join(
+                path.resolve(outDir),
+                componentName + '_cpp',
+            ),
+        )
 
+        const makeCmdOut = shelljs.exec('make', {silent: false})
+
+        if (makeCmdOut.stderr) {
+            console.error(
+                'Error running the make command. Please check if all ' + 
+                'dependencies are present.'
+            )
+            console.error(makeCmdOut)
+            console.error(makeCmdOut.stderr)
+        }
+
+        shelljs.mv(
+            path.join(
+                path.resolve(outDir),
+                componentName + '_cpp',
+                componentName,
+            ),
+            path.resolve(outDir),
+        )
+
+        shelljs.mv(
+            path.join(
+                path.resolve(outDir),
+                componentName + '_cpp',
+                componentName + '.dat',
+            ),
+            path.resolve(outDir),
+        )
+
+        shelljs.cd(configFileDir)
     }
 }
 

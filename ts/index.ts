@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import * as fs from 'fs'
+import * as path from 'path'
 import * as argparse from 'argparse'
 import * as yaml from 'js-yaml'
 
@@ -50,10 +51,8 @@ const main = async () => {
             const config = loadConfig(args.config)
             return (await compile(
                 config,
+                path.resolve(path.dirname(args.config)),
                 args.no_clobber,
-                args.max_old_space_size,
-                args.stack_size,
-                args.prime,
             ))
         } else if (args.subcommand === 'downloadPtau') {
             const config = loadConfig(args.config)

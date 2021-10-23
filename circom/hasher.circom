@@ -3,6 +3,7 @@ include "../node_modules/circomlib/circuits/poseidon.circom";
 
 template Hasher(numInputs) {
     signal input in[numInputs];
+    signal input pubInput; // does nothing in this example circuit
     signal output hash;
 
     component poseidon = Poseidon(numInputs);

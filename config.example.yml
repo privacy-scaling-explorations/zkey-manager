@@ -11,11 +11,13 @@ circuits:
   component: "Hasher"
   params: [2]
   type: "test"
+  pubInputs: ["pubInput"]
 
 - template: "./circom/hasher.circom"
   component: "Hasher"
   params: [3]
   type: "prod"
+  pubInputs: ["pubInput"]
 
 ptauFiles:
   1:

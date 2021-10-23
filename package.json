@@ -1,6 +1,6 @@
 {
   "name": "zkey-manager",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A convenient way for developers to manage the .zkey files from circom circuits, for production and testing.",
   "main": "build/index.js",
   "scripts": {

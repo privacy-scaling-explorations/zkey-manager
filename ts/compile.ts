@@ -49,8 +49,11 @@ const compile = async (
             path.resolve('./'),
             c.template,
         )
+
+        const pubInputs = c.pubInputs.join(',')
+
         const circuitSrc = `pragma circom 2.0.0;\ninclude "${template}";\n` +
-            `component main = ${c.component}(${c.params.join(', ')});\n`
+            `component main {public [${pubInputs}]}= ${c.component}(${c.params.join(', ')});\n`
 
         const filepaths = genFilepaths(outDir, c['type'], c.component, c.params)
 

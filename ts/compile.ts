@@ -81,7 +81,9 @@ const compile = async (
         // Write the circom file
         fs.writeFileSync(filepaths.circom, circuitSrc)
 
-        const compileCmd = `${config.circomPath} --c --r1cs --sym `+ //--wasm --wat` +
+        const compileFlags = config.circomFlags ||
+            '--c --r1cs --sym --wasm --wat';
+        const compileCmd = `${config.circomPath} ${compileFlags}` +
             ` -o ${config.out} ${filepaths.circom}`
 
         console.log(`Compiling ${c.component} (${c['type']}) with params ${c.params.toString()}`)

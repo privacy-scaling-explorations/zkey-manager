@@ -3,6 +3,7 @@
 # Make sure that these paths are correct
 snarkjsPath: "./node_modules/snarkjs/build/cli.cjs"
 circomPath: "../.local/bin/circom"
+circomFlags: "--c --r1cs --sym --wasm --wat"
 
 out: "./zkeys"
 

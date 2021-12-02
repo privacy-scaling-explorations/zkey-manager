@@ -89,45 +89,47 @@ const compile = async (
         console.log(`Compiling ${c.component} (${c['type']}) with params ${c.params.toString()}`)
         shelljs.exec(compileCmd)
 
-        const componentName = genName(c['type'], c.component, c.params)
+        if(compileFlags.includes('--c')) {
+            const componentName = genName(c['type'], c.component, c.params)
 
-        shelljs.cd(
-            path.join(
-                path.resolve(outDir),
-                componentName + '_cpp',
-            ),
-        )
-
-        const makeCmdOut = shelljs.exec('make', {silent: false})
-
-        if (makeCmdOut.stderr) {
-            console.error(
-                'Error running the make command. Please check if all ' + 
-                'dependencies are present.'
+            shelljs.cd(
+                path.join(
+                    path.resolve(outDir),
+                    componentName + '_cpp',
+                ),
             )
-            console.error(makeCmdOut)
-            console.error(makeCmdOut.stderr)
+
+            const makeCmdOut = shelljs.exec('make', {silent: false})
+
+            if (makeCmdOut.stderr) {
+                console.error(
+                    'Error running the make command. Please check if all ' + 
+                    'dependencies are present.'
+                )
+                console.error(makeCmdOut)
+                console.error(makeCmdOut.stderr)
+            }
+
+            shelljs.mv(
+                path.join(
+                    path.resolve(outDir),
+                    componentName + '_cpp',
+                    componentName,
+                ),
+                path.resolve(outDir),
+            )
+
+            shelljs.mv(
+                path.join(
+                    path.resolve(outDir),
+                    componentName + '_cpp',
+                    componentName + '.dat',
+                ),
+                path.resolve(outDir),
+            )
+
+            shelljs.cd(configFileDir)
         }
-
-        shelljs.mv(
-            path.join(
-                path.resolve(outDir),
-                componentName + '_cpp',
-                componentName,
-            ),
-            path.resolve(outDir),
-        )
-
-        shelljs.mv(
-            path.join(
-                path.resolve(outDir),
-                componentName + '_cpp',
-                componentName + '.dat',
-            ),
-            path.resolve(outDir),
-        )
-
-        shelljs.cd(configFileDir)
     }
 }
 

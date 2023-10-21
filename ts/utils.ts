@@ -44,8 +44,10 @@ const getPtauFromConfig = (
             const filePath = path.join(outDir, file)
             const snarkjsCmd = `node ${config.snarkjsPath} r1cs info ${filePath}`
             const out = shelljs.exec(snarkjsCmd, { silent: true })
-            const m = out.stdout.match(/# of Constraints: (\d+)\n/)
-            const c = Number(m[1])
+            const nConstraints = Number((out.stdout.match(/# of Constraints: (\d+)\n/))[1])
+            const nPubInputs = Number((out.stdout.match(/# of Public Inputs: (\d+)\n/))[1])
+            const nOutputs = Number((out.stdout.match(/# of Outputs: (\d+)\n/))[1])
+            const c = nConstraints + nPubInputs + nOutputs
             if (c > largestConstraints) {
                 largestConstraints = c
             }
@@ -53,12 +55,9 @@ const getPtauFromConfig = (
     }
 
     let tooLarge = false
-    let powerNeeded = 1
-    while (2 ** powerNeeded < largestConstraints) {
-        powerNeeded ++
-        if (powerNeeded > 28) {
-            tooLarge = true
-        }
+    let powerNeeded = Math.floor(Math.log(largestConstraints) * Math.LOG2E) + 1
+    if (powerNeeded > 28) {
+        tooLarge = true
     }
     powerNeeded ++
     console.log(largestConstraints, powerNeeded)

@@ -20,6 +20,11 @@ import {
     configureSubparsers as configureSubparsersForGenZkeys,
 } from './genZkeys'
 
+// import {
+//     genProofs,
+//     configureSubparsers as configureSubparsersForGenProofs,
+// } from './genProofs'
+
 const main = async () => {
     const parser = new argparse.ArgumentParser({ 
         description: 'zkey-manager: compile circom circuits and manage .zkey files',
@@ -65,8 +70,16 @@ const main = async () => {
             return (await genZkeys(
                 config,
                 args.no_clobber,
+                args.proof_system
             ))
         }
+        // else if (args.subcommand === 'genProofs') {
+        //     const config = loadConfig(args.config)
+        //     return (await genProofs(
+        //         config,
+        //         args.no_clobber,
+        //     ))
+        // }
     } catch (e) {
         console.error(e)
         return 1

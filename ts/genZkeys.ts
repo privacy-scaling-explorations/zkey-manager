@@ -67,7 +67,8 @@ const genZkeys = async (
         return 1
     }
 
-    console.log(`Using ${ptauFilepath} to generate initial zkey files`)
+    console.log(`Using ${ptauFilepath} to generate zkey files`)
+
     for (const file of fs.readdirSync(outDir)) {
         if (file.endsWith('.r1cs')) {
             const r1csFilePath = path.join(outDir, file)
@@ -94,21 +95,21 @@ const genZkeys = async (
                 
                 // 1st
                 {
-                    const cmd = `node ${config.snarkjsPath} zkey contribute ${zkeyFilePaths[0]} ${zkeyFilePaths[1]} -e=${randomByteString(20)} -n=1st zkey contribution`
+                    const cmd = `node ${config.snarkjsPath} zkey contribute ${zkeyFilePaths[0]} ${zkeyFilePaths[1]} -e="${randomByteString(20)}" -n="1st zkey contribution"`
                     console.log(`Generating ${zkeyFilePaths[1]}`)
                     shelljs.exec(cmd)
                 }
                 
                 // 2nd
                 {
-                    const cmd = `node ${config.snarkjsPath} zkey contribute ${zkeyFilePaths[1]} ${zkeyFilePaths[2]} -e=${randomByteString(20)} -n=2nd zkey contribution`
+                    const cmd = `node ${config.snarkjsPath} zkey contribute ${zkeyFilePaths[1]} ${zkeyFilePaths[2]} -e="${randomByteString(20)}" -n="2nd zkey contribution"`
                     console.log(`Generating ${zkeyFilePaths[2]}`)
                     shelljs.exec(cmd)
                 }
                 
                 // 3rd
                 {
-                    const cmd = `node ${config.snarkjsPath} zkey contribute ${zkeyFilePaths[2]} ${zkeyFilePaths[3]} -e=${randomByteString(20)} -n=3rd zkey contribution`
+                    const cmd = `node ${config.snarkjsPath} zkey contribute ${zkeyFilePaths[2]} ${zkeyFilePaths[3]} -e="${randomByteString(20)}" -n="3rd zkey contribution"`
                     console.log(`Generating ${zkeyFilePaths[3]}`)
                     shelljs.exec(cmd)
                 }
@@ -116,7 +117,7 @@ const genZkeys = async (
                 // Finalize
                 {
                     const VDF_iteration = 10;
-                    const cmd = `node ${config.snarkjsPath} zkey beacon ${zkeyFilePaths[3]} ${zkeyFilePaths[4]} ${randomByteString(20)} ${VDF_iteration} -n=final beacon phase 2`
+                    const cmd = `node ${config.snarkjsPath} zkey beacon ${zkeyFilePaths[3]} ${zkeyFilePaths[4]} ${randomByteString(20)} ${VDF_iteration} -n="Final beacon phase 2"`
                     console.log(`Generating ${zkeyFilePaths[4]}`)
                     shelljs.exec(cmd)
                 }

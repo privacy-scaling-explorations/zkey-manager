@@ -70,8 +70,20 @@ const getPtauFromConfig = (
     return config.ptauFiles[powerNeeded.toString()]
 }
 
+const randomByteString = (length: number) => {
+    const hex_alphabets = "0123456789abcdef"
+    let random_string: string[] = []
+    
+    for(let i = 0; i < length; i++) {
+        random_string.push(hex_alphabets[Math.floor(Math.random()*100) % 16])
+    }
+    
+    return random_string.join('')
+}
+
 export {
     genName,
     genFilepaths,
     getPtauFromConfig,
+    randomByteString
 }

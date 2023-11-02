@@ -47,7 +47,7 @@ generation for each of the `.r1cs` files.
 $ node zkey-manager downloadPtau -nc -c <CONFIG_FILE>
 ```
 
-## Generate the final `.zkey` files
+## Generate the final `.zkey` files: `genZkeys`
 
 ```
 $ node zkey-manager genZkeys -nc -c <CONFIG_FILE> -ps <PROOF_SYSTEM>

@@ -3,17 +3,10 @@
 This utility simplifies the process of `zkey` file management for circuits
 written in `circom`.
 
-**Warning:** for production setups, you should verify the integrity of the
-`.ptau` files that this utility downloads.
+**Warning:** for production setups, you should specify checksums to verify the integrity of the
+`.ptau` files that this utility downloads (see `downloadPtau`) or run linux checksum commands manually.
 
-If your circuits are larger than `2 ** 20` constraints, please modify your
-config file to include the URL of a `.ptau` file that supports it. We provide
-`.ptau` files (copied from the Hermez Network Prepare Phase 1 ceremony) up to 
-`powersOfTau28_hez_final_20.ptau`.
-
-There is no guarantee that Hermez will continue to provide all `.ptau` files up
-`2 ** 28` constraints in this [Dropbox
-folder](https://www.dropbox.com/sh/mn47gnepqu88mzl/AACaJkBU7mmCq8uU8ml0-0fma?dl=0).
+If your circuits are larger than `2 ** 28` constraints, please run native [`snarkjs`](https://github.com/iden3/snarkjs) commands instead. `zkey-manager` only supports generating zk proofs at most `2 ** 28` constraints (through using `*.ptau` files copied from the Hermez Network Phase 1 ceremony).
 
 ## Requirements
 
@@ -36,26 +29,36 @@ npm i zkey-manager
 
 See the `config.example.yml` file for an example.
 
-## Compile circuits
+## Compile circuits: `compile`
 
 ```
-zkey-manager compile -nc -c <CONFIG_FILE>
+$ node zkey-manager compile -nc -c <CONFIG_FILE>
 ```
 
 Set the `-nc` flag to avoid recompiling existing circuits.
 
-## Download the Phase 1 `.ptau` file
+## Download the Powers of Tau file: `downloadPtau`
 
 This scans the `out` directory as configured in the config file for `.r1cs`
 files, and downloads the `.ptau` file that is large enough to support `.zkey`
 generation for each of the `.r1cs` files.
 
 ```
-node build/index.js downloadPtau -nc -c <CONFIG_FILE>
+$ node zkey-manager downloadPtau -nc -c <CONFIG_FILE>
 ```
 
-## Generate the initial `.zkey` files
+## Generate the final `.zkey` files
 
 ```
-node build/index.js genZkeys -nc -c <CONFIG_FILE>
+$ node zkey-manager genZkeys -nc -c <CONFIG_FILE> -ps <PROOF_SYSTEM>
+```
+
+## Generate and verify zk proof files: `genProofs`
+```
+$ node zkey-manager genProofs -c <CONFIG_FILE> -ps <PROOF_SYSTEM>
+```
+
+## Clean working cache
+```
+$ node zkey-manager clean -c <CONFIG_FILE>
 ```

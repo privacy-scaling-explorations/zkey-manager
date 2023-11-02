@@ -55,7 +55,7 @@ const compile = async (
         const circuitSrc = `pragma circom 2.0.0;\ninclude "${template}";\n` +
             `component main {public [${pubInputs}]}= ${c.component}(${c.params.join(', ')});\n`
 
-        const filepaths = genFilepaths(outDir, c['type'], c.component, c.params)
+        const filepaths = genFilepaths(outDir, c.type, c.component, c.params)
 
         let filesExist = true
         for (const key of Object.keys(filepaths)) {
@@ -85,12 +85,13 @@ const compile = async (
             '--c --r1cs --sym --wasm --wat';
         const compileCmd = `${config.circomPath} ${compileFlags}` +
             ` -o ${config.out} ${filepaths.circom}`
-
-        console.log(`Compiling ${c.component} (${c['type']}) with params ${c.params.toString()}`)
+        console.log()
+        console.log(`Compiling ${c.component} (${c.type}) with params ${c.params.toString()}`)
         shelljs.exec(compileCmd)
 
+        // Willing to use C codes to generate witness later
         if(compileFlags.includes('--c')) {
-            const componentName = genName(c['type'], c.component, c.params)
+            const componentName = genName(c.type, c.component, c.params)
 
             shelljs.cd(
                 path.join(

@@ -20,10 +20,15 @@ import {
     configureSubparsers as configureSubparsersForGenZkeys,
 } from './genZkeys'
 
-// import {
-//     genProofs,
-//     configureSubparsers as configureSubparsersForGenProofs,
-// } from './genProofs'
+import {
+    genProofs,
+    configureSubparsers as configureSubparsersForGenProofs,
+} from './genProofs'
+
+import {
+    clean,
+    configureSubparsers as configureSubparsersForClean,
+} from './clean'
 
 const main = async () => {
     const parser = new argparse.ArgumentParser({ 
@@ -39,6 +44,8 @@ const main = async () => {
     configureSubparsersForCompile(subparsers)
     configureSubparsersForDownloadPtau(subparsers)
     configureSubparsersForGenZkeys(subparsers)
+    configureSubparsersForGenProofs(subparsers)
+    configureSubparsersForClean(subparsers)
 
     const args = parser.parse_args()
     
@@ -64,6 +71,7 @@ const main = async () => {
             return (await downloadPtau(
                 config,
                 args.no_clobber,
+                args.proof_system
             ))
         } else if (args.subcommand === 'genZkeys') {
             const config = loadConfig(args.config)
@@ -72,14 +80,19 @@ const main = async () => {
                 args.no_clobber,
                 args.proof_system
             ))
+        } else if (args.subcommand === 'genProofs') {
+            const config = loadConfig(args.config)
+            return (await genProofs(
+                config,
+                args.no_clobber,
+                args.proof_system
+            ))
+        } else if (args.subcommand === 'clean') {
+            const config = loadConfig(args.config)
+            return (await clean(
+                config
+            ))
         }
-        // else if (args.subcommand === 'genProofs') {
-        //     const config = loadConfig(args.config)
-        //     return (await genProofs(
-        //         config,
-        //         args.no_clobber,
-        //     ))
-        // }
     } catch (e) {
         console.error(e)
         return 1

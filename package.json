@@ -28,9 +28,9 @@
   "dependencies": {
     "argparse": "2.0.1",
     "circomlib": "^2.0.0",
-    "shelljs": "^0.8.4",
-    "js-yaml": "4.0.0",
-    "snarkjs": "0.4.7"
+    "shelljs": "0.8.5",
+    "js-yaml": "4.1.0",
+    "snarkjs": "^0.7.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
